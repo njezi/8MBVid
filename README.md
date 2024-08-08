@@ -25,6 +25,10 @@ python3 app.py
 ```
 5. Go to `http://127.0.0.1:5000/` and start using the tool.
 
+# System Requirements
+You don't need a very strong device, but I suggest using something that has a good CPU,
+otherwise you may need to wait a long time for one video to compress.
+
 # TODO
 - [x] Optimize File Cleanup
 - [ ] Make managing settings easier
