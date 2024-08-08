@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Video Compressor</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Upload a Video to Compress</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <input type="file" name="file" accept="video/*"><br><br>
+            <input type="submit" id="uploadButton" value="Upload">
+        </form>
+        <progress id="progressBar" value="0" max="100" style="display: none;"></progress>
+        <p id="status" style="display: none;">Uploading...</p>
+    </div>
+    <script>
+        document.getElementById('uploadForm').onsubmit = async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(this);
+            const progressBar = document.getElementById('progressBar');
+            const statusText = document.getElementById('status');
+
+
+            uploadButton.disabled = true;
+            progressBar.style.display = 'block';
+            statusText.style.display = 'block';
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', '/compress', true);
+
+            xhr.upload.onprogress = function(e) {
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 100;
+                    progressBar.value = percentComplete;
+                }
+            };
+
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    const filename = response.filename;
+
+                    // trigger the download
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = `/download/${filename}`;
+                    downloadLink.download = filename;
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                    document.body.removeChild(downloadLink);
+                }
+                uploadButton.disabled = false;
+                progressBar.style.display = 'none';
+                statusText.style.display = 'none';
+            };
+
+            xhr.onerror = function() {
+                alert('An error occurred while uploading the file.');
+                uploadButton.disabled = false;
+                progressBar.style.display = 'none';
+                statusText.style.display = 'none';
+            };
+
+            xhr.send(formData);
+        }
+    </script>
+</body>
+</html>
