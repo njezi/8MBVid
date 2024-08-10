@@ -31,10 +31,22 @@ otherwise you may need to wait a long time for one video to compress.
 
 # TODO
 - [x] Optimize File Cleanup
+- [ ] Add compression progress bar
 - [ ] Make managing settings easier
 - [ ] Add an option to change output file size
 - [ ] Make the UI look better
 - [ ] Improve Compression Settings
+
+# Troubleshooting
+### I can't visit the site from another device
+Make sure, that you changed the last line of `app.py` to include:
+```
+app.run(debug=True, port=5000, host='0.0.0.0')
+```
+(Also make sure to change the port, if `5000` is already being used)
+
+### Anything else
+Please create an issue, and I will try to help you solve it.
 
 # Contributing
 Contributions are welcome! Please open an issue or submit a pull request if you have suggestions or improvements.
